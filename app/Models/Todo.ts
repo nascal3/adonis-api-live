@@ -1,9 +1,15 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
-export default class ToDo extends BaseModel {
+export default class Todo extends BaseModel {
   @column({ isPrimary: true })
-  public id: number
+  public id: Number
+
+  @column()
+  public title: String
+
+  @column()
+  public is_completed: Boolean
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
