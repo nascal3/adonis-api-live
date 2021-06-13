@@ -2,9 +2,18 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import Todo from "App/Models/Todo";
 
-export default class TodosController {
-  public async index() {
-    return Todo.all();
+export default class TodoController {
+  public async index({request}: HttpContextContract) {
+    const page = request.input('page', 1)
+    const limit = request.input('per_page', 2)
+
+    const todos = await Todo.query().paginate(page, limit);
+
+    return todos.serialize({
+      fields: {
+        omit: ['updated_at']
+      }
+    })
   }
 
   public async store({request, response}: HttpContextContract) {
@@ -20,7 +29,7 @@ export default class TodosController {
     const todo = await Todo.findOrFail(params.id)
     todo.is_completed = request.input('is_completed')
 
-    todo.save()
+    await todo.save()
     return response.status(202).json({'ID': todo})
   }
 }

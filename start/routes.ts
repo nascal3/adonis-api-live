@@ -22,8 +22,15 @@ import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/', 'HomeController.index');
 Route.group(() => {
-  Route.get('/todo', 'TodosController.index');
-  Route.post('/todo', 'TodosController.store');
-  Route.patch('/todo/:id', 'TodosController.update');
-}).prefix('api')
+
+  Route.group(() => {
+    Route.get('/todo', 'TodoController.index');
+    Route.post('/todo', 'TodoController.store');
+    Route.patch('/todo/:id', 'TodoController.update');
+  }).middleware('auth')
+
+  Route.post('/register', 'AuthController.register');
+  Route.post('/login', 'AuthController.login');
+
+}).prefix('api');
 
